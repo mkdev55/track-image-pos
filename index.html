@@ -2,6 +2,10 @@
 <html>
 <head>
     <style>
+        body {
+            background-color: #222;
+            color: #fff;
+        }
         #image-container {
             position: relative;
             display: inline-block;
@@ -16,6 +20,10 @@
             left: 0;
             background-color: rgba(255, 255, 255, 0.7);
             padding: 5px;
+        }
+        .dark {
+            background-color: #000;
+            color: #fff;
         }
     </style>
 </head>
@@ -39,7 +47,7 @@
 
                     // Display image dimensions
                     var dimensions = document.createElement('p');
-                    dimensions.textContent = 'Image Dimensions: ' + image.width + ' x ' + image.height;
+                    dimensions.textContent = 'Image Dimensions: ' + image.width + ' x ' + image.height + ' pixels';
                     container.appendChild(dimensions);
                 };
             };
@@ -52,14 +60,14 @@
             var image = event.target;
             var container = document.getElementById('image-container');
 
-            // Calculate position relative to image size
-            var x = Math.round((event.offsetX / image.width) * 100);
-            var y = Math.round((event.offsetY / image.height) * 100);
+            // Get x and y positions in pixels
+            var x = event.offsetX;
+            var y = event.offsetY;
 
             // Create and update coordinates overlay
             var coordinates = document.createElement('div');
             coordinates.className = 'coordinates';
-            coordinates.textContent = 'X: ' + x + '%, Y: ' + y + '%';
+            coordinates.textContent = 'X: ' + x + 'px, Y: ' + y + 'px';
 
             // Remove previous coordinates overlay
             var previousCoordinates = container.querySelector('.coordinates');
@@ -76,6 +84,9 @@
 
         // Add event listener for mouse hover
         document.getElementById('image-container').addEventListener('mousemove', handleMouseHover);
+
+        // Toggle dark theme
+        document.body.classList.toggle('dark');
     </script>
 </body>
 </html>
