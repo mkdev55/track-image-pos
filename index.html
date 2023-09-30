@@ -1,1 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        #image-container {
+            position: relative;
+            display: inline-block;
+        }
+        #image-container img {
+            display: block;
+            max-width: 100%;
+        }
+        #image-container .coordinates {
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color: rgba(255, 255, 255, 0.7);
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+    <input type="file" id="image-upload" accept="image/*">
+    <div id="image-container"></div>
 
+    <script>
+        // Function to handle image upload
+        function handleImageUpload(event) {
+            var file = event.target.files[0];
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                var image = new Image();
+                image.src = e.target.result;
+                image.onload = function () {
+                    var container = document.getElementById('image-container');
+                    container.innerHTML = '';
+                    container.appendChild(image);
+
+                    // Display image dimensions
+                    var dimensions = document.createElement('p');
+                    dimensions.textContent = 'Image Dimensions: ' + image.width + ' x ' + image.height;
+                    container.appendChild(dimensions);
+                };
+            };
+
+            reader.readAsDataURL(file);
+        }
+
+        // Function to handle mouse hover event
+        function handleMouseHover(event) {
+            var image = event.target;
+            var container = document.getElementById('image-container');
+
+            // Calculate position relative to image size
+            var x = Math.round((event.offsetX / image.width) * 100);
+            var y = Math.round((event.offsetY / image.height) * 100);
+
+            // Create and update coordinates overlay
+            var coordinates = document.createElement('div');
+            coordinates.className = 'coordinates';
+            coordinates.textContent = 'X: ' + x + '%, Y: ' + y + '%';
+
+            // Remove previous coordinates overlay
+            var previousCoordinates = container.querySelector('.coordinates');
+            if (previousCoordinates) {
+                container.removeChild(previousCoordinates);
+            }
+
+            // Append updated coordinates overlay
+            container.appendChild(coordinates);
+        }
+
+        // Add event listener for image upload
+        document.getElementById('image-upload').addEventListener('change', handleImageUpload);
+
+        // Add event listener for mouse hover
+        document.getElementById('image-container').addEventListener('mousemove', handleMouseHover);
+    </script>
+</body>
+</html>
